@@ -266,7 +266,123 @@ namespace File_Based_CRUD_Operation
 
                         break;
 
-                    
+                    case 4:
+                        Console.ForegroundColor = ConsoleColor.DarkYellow;
+                        Console.WriteLine("                        Enter '4' to Update the Particular Employee                          ");
+                        Console.ResetColor();
+                        Console.WriteLine();
+                        Console.ForegroundColor = ConsoleColor.DarkCyan;
+                        Console.WriteLine("---------------------------------------------------------------------------------------------");
+                        Console.ResetColor();
+                        Console.WriteLine();
+
+                        if(File.Exists(FilePath))
+                        {
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.Write("Enter the Employee ID for Update : ");
+                            Console.ResetColor();
+                            string empid = Console.ReadLine();
+
+                            while (true)
+                            {
+                                Console.WriteLine();
+                                Console.ForegroundColor = ConsoleColor.Cyan;
+                                Console.WriteLine("                         -------- Enter the choice for Updating --------                     ");
+                                Console.ResetColor();
+                                Console.WriteLine("                                      1. Update the Name                                     ");
+                                Console.WriteLine("                                      2. Update the Department                               ");
+                                Console.WriteLine("                                      3. Update the Salary                                   ");
+                                Console.WriteLine("                                      4. Exit                                                ");
+                                Console.ForegroundColor = ConsoleColor.Cyan;
+                                Console.WriteLine("                         -----------------------------------------------                     ");
+                                Console.ResetColor();
+                                Console.WriteLine();
+
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.Write("Enter the Choice for Updating : ");
+                                Console.ResetColor();
+                                int choice = int.Parse(Console.ReadLine());
+
+                                List<String> lines = new List<string>(File.ReadAllLines(FilePath));
+
+                                if(choice == 4)
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Blue;
+                                    Console.WriteLine("Thank You :)");
+                                    Console.ResetColor();
+                                }
+
+                                for(int i = 0; i<lines.Count; i++)
+                                {
+                                    string[] list = lines[i].Split(',');
+                                    if (list[0] == empid)
+                                    {
+                                        if (choice == 1)
+                                        {
+                                            Console.ForegroundColor = ConsoleColor.DarkYellow;
+                                            Console.Write("Enter the Updated Name            : ");
+                                            Console.ResetColor();
+                                            string empName = Console.ReadLine();
+                                            list[1] = empName;
+
+                                            Console.WriteLine();
+                                            Console.ForegroundColor = ConsoleColor.Blue;
+                                            Console.WriteLine("Name has been updated successfully");
+                                            Console.ResetColor();
+                                            Console.WriteLine();
+
+
+                                        }
+                                        else if (choice == 2)
+                                        {
+                                            Console.ForegroundColor = ConsoleColor.DarkYellow;
+                                            Console.Write("Enter the Updated Department      : ");
+                                            Console.ResetColor();
+                                            string empDepartment = Console.ReadLine();
+                                            list[2] = empDepartment;
+
+                                            Console.WriteLine();
+                                            Console.ForegroundColor = ConsoleColor.Blue;
+                                            Console.WriteLine("Department has been updated successfully");
+                                            Console.ResetColor();
+                                            Console.WriteLine();
+                                        }
+                                        else if (choice == 3)
+                                        {
+                                            Console.ForegroundColor = ConsoleColor.DarkYellow;
+                                            Console.Write("Enter the Updated Salary          : ");
+                                            Console.ResetColor();
+                                            string empSalary = Console.ReadLine();
+                                            list[3] = empSalary;
+
+                                            Console.WriteLine();
+                                            Console.ForegroundColor = ConsoleColor.Blue;
+                                            Console.WriteLine("Salary has been updated successfully");
+                                            Console.ResetColor();
+                                            Console.WriteLine();
+                                        }
+                                        
+
+                                        lines[i] = string.Join(',', list);
+                                        File.WriteAllLines(FilePath, lines);
+                                    }
+
+                                }
+                                if (choice == 4)
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("File Not Found");
+                            Console.ResetColor();
+                        }
+                        Console.WriteLine();
+                        break;
+
 
                 }
             }
