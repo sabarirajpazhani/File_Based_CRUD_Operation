@@ -6,6 +6,46 @@ namespace File_Based_CRUD_Operation
     public class Program
     {
         public static int EmpID = 104;
+
+        public static void DisplayAllDetails(string FilePath)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine("---------------------------------------------------------------------------------------------");
+            Console.ResetColor();
+
+            Console.WriteLine(
+                $"{"Employee ID",-20}" +
+                $"{"Employee Name",-25}" +
+                $"{"Department",-20}" +
+                $"{"Salary",-15}"
+            );
+
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine("---------------------------------------------------------------------------------------------");
+            Console.ResetColor();
+
+
+
+            foreach (string list in File.ReadLines(FilePath))
+            {
+                string[] EmpDetails = list.Split(',');
+
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine(
+                       $"{EmpDetails[0],-20}" +
+                       $"{EmpDetails[1],-25}" +
+                       $"{EmpDetails[2],-20}" +
+                       $"{EmpDetails[3],-15}"
+                );
+                Console.ResetColor();
+            }
+
+
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine("---------------------------------------------------------------------------------------------");
+            Console.ResetColor();
+            Console.WriteLine();
+        }
         static void Main(string[] args)
         {  
 
@@ -83,31 +123,60 @@ namespace File_Based_CRUD_Operation
                         Console.ResetColor();
                         Console.WriteLine();
 
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.Write("Enter the Employee Name : ");
-                        Console.ResetColor();
-                        string EmployeeName = Console.ReadLine();
-
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.Write("Enter the Department : ");
-                        Console.ResetColor();
-                        string Department = Console.ReadLine();
-
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.Write("Enter the Salary : ");
-                        Console.ResetColor();
-                        int Salary = int.Parse(Console.ReadLine());
-
-                        EmpID++;
-
-                        string details = $"{EmpID},{EmployeeName},{Department},{Salary}";
+                       
 
                         if (File.Exists(FilePath))
                         {
+                        EmpCreate:
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.Write("Enter the Employee Name : ");
+                            Console.ResetColor();
+                            string EmployeeName = Console.ReadLine();
+
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.Write("Enter the Department : ");
+                            Console.ResetColor();
+                            string Department = Console.ReadLine();
+
+                            bool flag = false;
+
+                            foreach (string i in File.ReadAllLines(FilePath))
+                            {
+                                string[] list = i.Split(',');
+
+                                if (list[1] == EmployeeName && list[2] == Department)
+                                {
+                                    flag = true;
+                                    break;
+                                }
+                            }
+
+                            if (flag)
+                            {
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("Already Employee Exist, So Re-Enter the Details");
+                                Console.ResetColor();
+                                Console.WriteLine();    
+                                goto EmpCreate;
+                            }
+
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.Write("Enter the Salary : ");
+                            Console.ResetColor();
+                            int Salary = int.Parse(Console.ReadLine());
+
+                            
+                            
+
+                            EmpID++;
+
+                            string details = $"{EmpID},{EmployeeName},{Department},{Salary}";
+
                             using (StreamWriter sw = File.AppendText(FilePath))
                             {
                                 sw.WriteLine(details);
 
+                                Console.WriteLine();
                                 Console.ForegroundColor = ConsoleColor.DarkYellow;
                                 Console.WriteLine("                 * --------------- Registered Student --------------- *                      ");
                                 Console.ResetColor();
@@ -121,6 +190,7 @@ namespace File_Based_CRUD_Operation
                                 Console.WriteLine("                 ------------------------------------------------------                      ");
                                 Console.ResetColor();
 
+
                                 Console.WriteLine();
                                 Console.ForegroundColor = ConsoleColor.Blue;
                                 Console.WriteLine($"Employee ID -{EmpID} is Successfully Added");
@@ -133,6 +203,7 @@ namespace File_Based_CRUD_Operation
                             Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine("File Not Found");
                             Console.ResetColor();
+
                         }
 
                         break;
@@ -154,42 +225,7 @@ namespace File_Based_CRUD_Operation
 
                         if (File.Exists(FilePath))
                         {
-                            Console.ForegroundColor = ConsoleColor.DarkYellow;
-                            Console.WriteLine("---------------------------------------------------------------------------------------------");
-                            Console.ResetColor();
-
-                            Console.WriteLine(
-                                $"{"Employee ID",-20}" +
-                                $"{"Employee Name",-25}" +
-                                $"{"Department",-20}" +
-                                $"{"Salary",-15}"
-                            );
-
-                            Console.ForegroundColor = ConsoleColor.DarkYellow;
-                            Console.WriteLine("---------------------------------------------------------------------------------------------");
-                            Console.ResetColor();
-
-
-
-                            foreach (string list in File.ReadLines(FilePath))
-                            {
-                                string[] EmpDetails = list.Split(',');
-
-                                Console.ForegroundColor = ConsoleColor.DarkYellow;
-                                Console.WriteLine(
-                                       $"{EmpDetails[0],-20}" +
-                                       $"{EmpDetails[1],-25}" +
-                                       $"{EmpDetails[2],-20}" +
-                                       $"{EmpDetails[3],-15}"
-                                );
-                                Console.ResetColor();
-                            }
-
-
-                            Console.ForegroundColor = ConsoleColor.DarkYellow;
-                            Console.WriteLine("---------------------------------------------------------------------------------------------");
-                            Console.ResetColor();
-                            Console.WriteLine();
+                            DisplayAllDetails(FilePath);
                         }
                         else
                         {
@@ -210,59 +246,89 @@ namespace File_Based_CRUD_Operation
                         Console.ResetColor();
                         Console.WriteLine();
 
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.Write("Enter the Employee ID : ");
-                        Console.ResetColor();
-                        string Empid = Console.ReadLine();
-                        Console.WriteLine();
-
-                        Console.WriteLine();
-                        Console.ForegroundColor = ConsoleColor.Magenta;
-                        Console.WriteLine($"                  Here are the Employee details for Employee - {Empid}                      ");
-
-
-
-                        Console.ForegroundColor = ConsoleColor.DarkYellow;
-                        Console.WriteLine("---------------------------------------------------------------------------------------------");
-                        Console.ResetColor();
-
-                        Console.WriteLine(
-                            $"{"Employee ID",-20}" +
-                            $"{"Employee Name",-25}" +
-                            $"{"Department",-20}" +
-                            $"{"Salary",-15}"
-                        );
-
-                        Console.ForegroundColor = ConsoleColor.DarkYellow;
-                        Console.WriteLine("---------------------------------------------------------------------------------------------");
-                        Console.ResetColor();
-
-                        foreach (string list in File.ReadLines(FilePath))
+                        if (File.Exists(FilePath))
                         {
-                            string[] EmpDetails = list.Split(',');
+                            EmpView:
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.Write("Enter the Employee ID : ");
+                            Console.ResetColor();
+                            string Empid = Console.ReadLine();
+                            Console.WriteLine();
 
-                            if (EmpDetails[0] == Empid)
+                            bool flag = false;
+                            foreach (String i in File.ReadAllLines(FilePath))
                             {
-                                Console.ForegroundColor = ConsoleColor.DarkYellow;
-                                Console.WriteLine(
-                                       $"{EmpDetails[0],-20}" +
-                                       $"{EmpDetails[1],-25}" +
-                                       $"{EmpDetails[2],-20}" +
-                                       $"{EmpDetails[3],-15}"
-                                );
+                                string[] line = i.Split(',');
+
+                                if (line[0] == Empid)
+                                {
+                                    flag =  true;
+                                }
+                            }
+
+                            if (!flag)
+                            {
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("ID Not Found");
                                 Console.ResetColor();
+                                Console.WriteLine();
+                                goto EmpView;
                             }
-                            else
+
+                            Console.WriteLine();
+                            Console.ForegroundColor = ConsoleColor.Magenta;
+                            Console.WriteLine($"                  Here are the Employee details for Employee - {Empid}                      ");
+
+
+
+                            Console.ForegroundColor = ConsoleColor.DarkYellow;
+                            Console.WriteLine("---------------------------------------------------------------------------------------------");
+                            Console.ResetColor();
+
+                            Console.WriteLine(
+                                $"{"Employee ID",-20}" +
+                                $"{"Employee Name",-25}" +
+                                $"{"Department",-20}" +
+                                $"{"Salary",-15}"
+                            );
+
+                            Console.ForegroundColor = ConsoleColor.DarkYellow;
+                            Console.WriteLine("---------------------------------------------------------------------------------------------");
+                            Console.ResetColor();
+
+                            foreach (string list in File.ReadLines(FilePath))
                             {
-                                continue;
+                                string[] EmpDetails = list.Split(',');
+
+                                if (EmpDetails[0] == Empid)
+                                {
+                                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                                    Console.WriteLine(
+                                           $"{EmpDetails[0],-20}" +
+                                           $"{EmpDetails[1],-25}" +
+                                           $"{EmpDetails[2],-20}" +
+                                           $"{EmpDetails[3],-15}"
+                                    );
+                                    Console.ResetColor();
+                                }
+                                else
+                                {
+                                    continue;
+                                }
                             }
+
+                            Console.ForegroundColor = ConsoleColor.DarkYellow;
+                            Console.WriteLine("---------------------------------------------------------------------------------------------");
+                            Console.ResetColor();
+
+                            Console.WriteLine();
                         }
-
-                        Console.ForegroundColor = ConsoleColor.DarkYellow;
-                        Console.WriteLine("---------------------------------------------------------------------------------------------");
-                        Console.ResetColor();
-
-                        Console.WriteLine();
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("File Not Found");
+                            Console.ResetColor();
+                        }
 
                         break;
 
@@ -278,10 +344,32 @@ namespace File_Based_CRUD_Operation
 
                         if(File.Exists(FilePath))
                         {
+                        EmpUpdate:
                             Console.ForegroundColor = ConsoleColor.Green;
                             Console.Write("Enter the Employee ID for Update : ");
                             Console.ResetColor();
                             string empid = Console.ReadLine();
+
+                            bool flag = false;
+
+                            foreach(string i in File.ReadAllLines(FilePath))
+                            {
+                                string[] lines = i.Split(',');
+
+                                if (lines[0] == empid)
+                                {
+                                    flag = true;
+                                }
+                            }
+
+                            if (!flag)
+                            {
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("ID Not Found");
+                                Console.ResetColor();
+                                Console.WriteLine();
+                                goto EmpUpdate;
+                            }
 
                             while (true)
                             {
@@ -384,6 +472,108 @@ namespace File_Based_CRUD_Operation
                         break;
 
 
+                    case 5:
+                        Console.ForegroundColor = ConsoleColor.DarkYellow;
+                        Console.WriteLine("                        Enter '5' to Delete the Particular Employee                          ");
+                        Console.ResetColor();
+                        Console.WriteLine();
+                        Console.ForegroundColor = ConsoleColor.DarkCyan;
+                        Console.WriteLine("---------------------------------------------------------------------------------------------");
+                        Console.ResetColor();
+                        Console.WriteLine();
+
+                        Console.ForegroundColor = ConsoleColor.Magenta;
+                        Console.WriteLine("                                   Here All the Student Details                              ");
+                        Console.ResetColor();
+
+                        DisplayAllDetails(FilePath);
+
+                        if(File.Exists(FilePath))
+                        {
+                            EmpDelete:
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.Write("Enter the Employee ID for Deleting : ");
+                            Console.ResetColor();
+
+                            string empid = Console.ReadLine();
+
+                            bool flag = false;
+                            foreach (string i in File.ReadLines(FilePath))
+                            {
+                                string[] list = i.Split(',');
+
+                                if (list[0] == empid)
+                                {
+                                    flag = true;
+                                }
+                            }
+
+                            if (!flag)
+                            {
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("ID Not Found");
+                                Console.ResetColor();
+                                Console.WriteLine();
+                                goto EmpDelete;
+                            }
+                            var lines = File.ReadAllLines(FilePath);
+                            var updated = lines.Where(line => line.Split(',')[0] != empid).ToList();
+
+                            if(lines.Count() != updated.Count)
+                            {
+                                File.WriteAllLines(FilePath, updated);
+
+                                Console.ForegroundColor = ConsoleColor.Blue;
+                                Console.WriteLine("Deleted Successfully");
+                                Console.ResetColor();
+                            }
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("File Not Found");
+                            Console.ResetColor();
+                        }
+
+                        break;
+
+                    case 6:
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        Console.WriteLine("-------------------------------------------------------------");
+                        Console.ResetColor();
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine("                     You Choose to Exist :)                  ");
+                        Console.ResetColor();
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        Console.WriteLine("-------------------------------------------------------------");
+                        Console.ResetColor();
+                        Console.WriteLine();
+                        Console.WriteLine();
+
+                        for (int i = 5; i > 0; i--)
+                        {
+                            Console.Clear();
+                            Console.ForegroundColor = ConsoleColor.Cyan;
+                            Console.Write("                 Existing : ");
+                            Console.ResetColor();
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine($" {i} ");
+                            Console.ResetColor();
+                            Thread.Sleep(1000);
+                        }
+                        break;
+                }
+                if (Choice == 6)
+                {
+
+                    Console.Clear();
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    Console.WriteLine("                      ~ * Thank You * ~                    ");
+                    Console.ResetColor();
+                    Console.ReadKey();
+                    break;
                 }
             }
         }
